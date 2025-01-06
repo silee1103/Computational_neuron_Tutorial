@@ -25,7 +25,7 @@ def readBatchData(dataFolder, batchLabel, loadAll=False, saveAll=True, vars=None
     # load from previously saved file with all data
     if loadAll:
         print('\nLoading single file with all data...')
-        filename = '%s/%s/%s_allData.json' % (dataFolder, batchLabel, batchLabel)
+        filename = f'{dataFolder}/{batchLabel}_allData.json'
         with open(filename, 'r') as fileObj:
             dataLoad = json.load(fileObj, object_pairs_hook=OrderedDict)
         params = dataLoad['params']
@@ -39,7 +39,7 @@ def readBatchData(dataFolder, batchLabel, loadAll=False, saveAll=True, vars=None
         listCombs = dataLoad['paramsMatch']
 
     # read the batch file and cfg
-    batchFile = '%s/%s_batch.json' % (dataFolder, batchLabel)
+    batchFile = f'{dataFolder}/{batchLabel}_batch.json'
     with open(batchFile, 'r') as fileObj:
         b = json.load(fileObj)['batch']
 
@@ -60,13 +60,13 @@ def readBatchData(dataFolder, batchLabel, loadAll=False, saveAll=True, vars=None
         data = {}
         print('Reading data...')
         missing = 0
-        for i,(iComb, pComb) in enumerate(zip(indexCombinations, valueCombinations)):
-            if (not maxCombs or i<= maxCombs) and (not listCombs or list(pComb) in listCombs):
+        for i, (iComb, pComb) in enumerate(zip(indexCombinations, valueCombinations)):
+            if (not maxCombs or i <= maxCombs) and (not listCombs or list(pComb) in listCombs):
                 print(i, iComb)
                 # read output file
-                iCombStr = ''.join([''.join('_'+str(i)) for i in iComb])
-                simLabel = b['batchLabel']+iCombStr
-                outFile = b['saveFolder']+'/'+simLabel+'.json'
+                iCombStr = ''.join([f'_{idx}' for idx in iComb])
+                simLabel = f'{batchLabel}{iCombStr}'
+                outFile = f'{dataFolder}/{simLabel}_data.json'
                 try:
                     with open(outFile, 'r') as fileObj:
                         output = json.load(fileObj, object_pairs_hook=OrderedDict)
@@ -85,24 +85,31 @@ def readBatchData(dataFolder, batchLabel, loadAll=False, saveAll=True, vars=None
                         elif isinstance(key, str):
                             data[iCombStr][key] = output[key]
 
-                except:
-                    print('... file missing')
-                    missing = missing + 1
-                    output = {}
+                except FileNotFoundError:
+                    print(f'... file missing: {outFile}')
+                    missing += 1
             else:
-                missing = missing + 1
+                missing += 1
 
-        print('%d files missing' % (missing))
+        print(f'{missing} files missing')
 
         # save
         if saveAll:
             print('Saving to single file with all data')
-            filename = '%s/%s_allData.json' % (dataFolder, batchLabel)
+            filename = f'{dataFolder}/{batchLabel}_allData.json'
             dataSave = {'params': params, 'data': data}
             with open(filename, 'w') as fileObj:
                 json.dump(dataSave, fileObj)
 
         return params, data
+
+def readPlot():
+    dataFolder = 'tut8_data'
+    batchLabel = 'tauWeight'
+
+    params, data = readBatchData(dataFolder, batchLabel, loadAll=False, saveAll=True, vars=None, maxCombs=None)
+    plot2DRate(dataFolder, batchLabel, params, data, 'synMechTau2', 'connWeight', 'M', "'M' pop rate (Hz)")
+
 
 #--------------------------------------------------------------------
 # Function to convert data to Pandas
