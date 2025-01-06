@@ -1,0 +1,11 @@
+NEURON -- VERSION 8.2.6+ HEAD (078a34a9d+) 2024-07-24
+Duke, Yale, and the BlueBrain Project -- Copyright 1984-2022
+See http://neuron.yale.edu/neuron/credits
+
+
+
+Creating network of 2 cell populations on 1 hosts...:   0%|          |[A
+Creating network of 2 cell populations on 1 hosts...: 100%|##########|
+  S->M:   0%|          | Creating synaptic connections for 0/20 postsynaptic cells on node 0 (probabilistic connectivity)  S->M: 100%|##########| Creating synaptic connections for 20/20 postsynaptic cells on node 0 (probabilistic connectivity)
+0 /home/silee1103/.pyenv/versions/neuron/bin/nrniv: can't open simConfig=tut8_data/tauWeight_1_1_cfg.json
+Could not open netParams=tut8_data/tauWeight_netParams.py
