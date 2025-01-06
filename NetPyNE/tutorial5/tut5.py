@@ -55,14 +55,14 @@ netParams.connParams['E->all'] = {
         'synMech': 'exc'                      # synaptic mechanism
 }
 
-netParams.connParams['I->E'] = {                          # I -> E
-        'preConds': {'cellType': 'I'},                        # presynaptic conditions
-        'postConds': {'pop': ['E2','E4','E5']},               # postsynaptic conditions
-        'probability': '0.4*exp(-dist_3D/probLengthConst)',   # probability of connection
-        'weight': 0.001,                                      # synaptic weight
-        'delay': 'dist_3D/propVelocity',                      # transmission delay (ms)
-        'synMech': 'inh'                                      # synaptic mechanism
-}
+# netParams.connParams['I->E'] = {                          # I -> E
+#         'preConds': {'cellType': 'I'},                        # presynaptic conditions
+#         'postConds': {'pop': ['E2','E4','E5']},               # postsynaptic conditions
+#         'probability': '0.4*exp(-dist_3D/probLengthConst)',   # probability of connection
+#         'weight': 0.001,                                      # synaptic weight
+#         'delay': 'dist_3D/propVelocity',                      # transmission delay (ms)
+#         'synMech': 'inh'                                      # synaptic mechanism
+# }
 
 # Simulation options
 simConfig = specs.SimConfig()       # object of class SimConfig to store simulation configuration
@@ -78,4 +78,4 @@ simConfig.savePickle = False        # Save params, network and sim output to pic
 simConfig.analysis['plotRaster'] = {'orderBy': 'y', 'orderInverse': True, 'saveFig': True}         # Plot a raster
 simConfig.analysis['plotTraces'] = {'include': [('E2',0), ('E4', 0), ('E5', 5)], 'saveFig': True}  # Plot recorded traces for this list of cells
 simConfig.analysis['plot2Dnet'] = {'saveFig': True}                                                # plot 2D cell positions and connections
-simConfig.analysis['plotConn'] = {'saveFig': True}    
+# simConfig.analysis['plotConn'] = {'saveFig': True}
