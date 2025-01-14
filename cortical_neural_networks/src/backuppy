@@ -1,0 +1,76 @@
+from netpyne.specs import NetParams
+
+# Define network parameters
+netParams = NetParams()
+
+# Define the PYR cell model with RefractoryNeuron attached to the soma section
+netParams.cellParams['PYR'] = {
+    'cellType': 'PYR',
+    'secs': {
+        'soma': {
+            'geom': {'diam': 20, 'L': 20, 'Ra': 150},
+            'pointps': {
+                'RefractoryNeuron':{
+                    'mod':'RefractoryNeuron',
+                    'thresh': -55,
+                    'abs_refrac': 1,
+                    'rel_refrac': 15,
+                    'rel_factor': 10,
+                    'tau': 10
+                }
+            },
+            'vinit': -70
+        }
+    }
+}
+
+# Population definitions
+netParams.popParams['E'] = {'cellType': 'PYR', 'numCells': 800}  # Excitatory neurons
+netParams.popParams['I'] = {'cellType': 'PYR', 'numCells': 200}  # Inhibitory neurons
+
+# Synaptic mechanisms
+netParams.synMechParams['exc'] = {'mod': 'CustomAlphaSynapse', 'tau': 1.7, 'e': 0, 'gmax': 0.14}
+netParams.synMechParams['inh'] = {'mod': 'CustomAlphaSynapse', 'tau': 1.7, 'e': -80, 'gmax': 0.14}
+
+# Background inputs
+netParams.stimSourceParams['backgroundE'] = {'type': 'NetStim', 'rate': 2, 'noise': 1.0}
+netParams.stimSourceParams['backgroundI'] = {'type': 'NetStim', 'rate': 12.5, 'noise': 1.0}
+
+netParams.stimTargetParams['bgE->E'] = {
+    'source': 'backgroundE',
+    'conds': {'cellType': 'PYR'},
+    'sec': 'soma',
+    'loc': 0.5,
+    'synMech': 'exc'
+}
+
+netParams.stimTargetParams['bgI->E'] = {
+    'source': 'backgroundI',
+    'conds': {'cellType': 'PYR'},
+    'sec': 'soma',
+    'loc': 0.5,
+    'synMech': 'inh'
+}
+
+# Synaptic connections
+netParams.connParams['E->E'] = {
+    'preConds': {'pop': 'E'},
+    'postConds': {'pop': 'E'},
+    'probability': 0.05,
+    'weight': 0.001,
+    'delay': 'normal(5, 1)',
+    'synMech': 'exc',
+    'sec': 'soma',
+    'loc': 0.5
+}
+
+netParams.connParams['I->E'] = {
+    'preConds': {'pop': 'I'},
+    'postConds': {'pop': 'E'},
+    'probability': 0.05,
+    'weight': 0.002,
+    'delay': 'normal(5, 1)',
+    'synMech': 'inh',
+    'sec': 'soma',
+    'loc': 0.5
+}

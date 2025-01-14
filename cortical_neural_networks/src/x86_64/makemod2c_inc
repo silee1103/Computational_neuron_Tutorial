@@ -1,0 +1,16 @@
+./CustomAlphaSynapse.c: ../CustomAlphaSynapse.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "CustomAlphaSynapse.mod" -o "/home/silee1103/Neuron/cortical_neural_networks/src/x86_64")
+
+./CustomAlphaSynapse.o: ./CustomAlphaSynapse.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
+./RefractoryNeuron.c: ../RefractoryNeuron.mod
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "RefractoryNeuron.mod" -o "/home/silee1103/Neuron/cortical_neural_networks/src/x86_64")
+
+./RefractoryNeuron.o: ./RefractoryNeuron.c
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) $<\\n"
+	$(COMPILE) -I".." $(INCLUDES) -fPIC -c $< -o $@
+
